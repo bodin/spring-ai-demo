@@ -1,0 +1,57 @@
+= Spring AI Demo
+
+A simple demo of common ai agent concepts
+
+== Running
+
+You will need `Docker` installed to run the LLMS
+
+Execute the below command to start the ollama api server.
+
+```
+docker run \
+ --rm \
+ -e OLLAMA_DEBUG=2 \
+ -v ~/ollama_models:/root/.ollama \
+ -p 11434:11434 \
+ --name ollama \
+ ollama/ollama
+```
+
+You will need three models to run the examples - in a terminal run the below commands to fetch the LLMs
+
+```
+# Normal Chat
+docker exec -it ollama ollama pull llama3.1
+
+# Vision
+docker exec -it ollama ollama pull gemma3
+
+# Rag
+docker exec -it ollama ollama pull mxbai-embed-large
+```
+
+Once ollama is running you can run our local spring API using `bootRun`
+
+```
+./gradlew bootRun
+```
+
+== Testing
+
+you can now call the APIs using the examples provided in the `scripts` directory.1
+
+```
+POST http://localhost:8080/helpdesk/chat
+
+I can't connect to my internet can you help me figure out why?
+
+###
+```
+
+== Common Workflows / Links / References
+
+. https://docs.spring.io/spring-ai/reference/api/effective-agents.html[Agent Workflow / Multi Agent]
+. https://docs.spring.io/spring-ai/reference/observability/index.html[Observability]
+. https://github.com/spring-projects/spring-ai/issues/1081[Guardrails]
+. https://docs.spring.io/spring-ai/reference/api/testing.html[Evals]
