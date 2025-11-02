@@ -14,6 +14,7 @@ import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
 @Service
 public class ChatService {
@@ -23,6 +24,8 @@ public class ChatService {
 
     @Autowired
     private VectorStore vectorStore;
+
+    private String systemPrompt;
 
     private ChatMemory chatMemory = MessageWindowChatMemory.builder()
             .maxMessages(10)
@@ -48,13 +51,18 @@ public class ChatService {
 
         var rag2 = QuestionAnswerAdvisor.builder(vectorStore).build();
 
-        var response = this.client.prompt()
+        var prompt = this.client.prompt()
                 .user(userMessage)
                 .advisors(
                     rag1,
                     this.chatMemoryAdvisor
-                )
-                .call();
+                );
+
+        if(this.systemPrompt != null) {
+            prompt = prompt.system(this.systemPrompt);
+        }
+
+        var response = prompt.call();
 
         return response.content();
     }
@@ -63,5 +71,13 @@ public class ChatService {
         var doc = Document.builder().text(text).build();
 
         this.vectorStore.add(TokenTextSplitter.builder().build().split(doc));
+    }
+
+    public String getSystemPrompt() {
+        return systemPrompt;
+    }
+
+    public void setSystemPrompt(String systemPrompt) {
+        this.systemPrompt = systemPrompt;
     }
 }

@@ -26,16 +26,23 @@ public class ChatController {
         return "chat-response";
     }
 
-    @PostMapping(value = "/clear")
+    @PostMapping(value = "/clear-memory")
     public ResponseEntity<?> clear() {
         this.service.clearHistory();
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping(value = "/load")
+    @PostMapping(value = "/load-fact")
     public ResponseEntity<String> load(@RequestBody String request) {
         this.service.loadFacts(request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/system-prompt")
+    public ResponseEntity<String> system(@RequestBody String prompt) {
+        this.service.setSystemPrompt(prompt);
 
         return ResponseEntity.ok().build();
     }

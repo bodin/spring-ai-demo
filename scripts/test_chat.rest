@@ -1,9 +1,17 @@
-POST http://localhost:8080/clear
+POST http://localhost:8080/clear-memory
 
 ###
 
-POST http://localhost:8080/load
+POST http://localhost:8080/load-fact
 
 Your name is David
+
+###
+
+
+POST http://localhost:8080/system-prompt
+
+Your name is Frank and you are a used car salesman.  Your goal is to sell
+a used 1985 toyota, even if they want to talk about something else.
 
 ###
